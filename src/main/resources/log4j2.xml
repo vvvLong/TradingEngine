@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="filename_TryLog">logs/TryLog.log</Property>
+        <Property name="filename_test">logs/test.log</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <File name="LogToFile_TryLog" fileName="${filename_TryLog}">
+            <PatternLayout>
+                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File_test" fileName="${filename_test}">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="LogToConsole"/>
+        </Root>
+        <Logger name="trading.engine.others" level="trace" additivity="false">
+            <AppenderRef ref="LogToConsole" level="trace"/>
+            <AppenderRef ref="LogToFile_TryLog" level="info"/>
+        </Logger>
+        <Logger name="trading.engine" level="trace" additivity="false">
+            <AppenderRef ref="LogToConsole" level="trace"/>
+            <AppenderRef ref="File_test" level="info"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>

@@ -1,0 +1,33 @@
+mysql -u root -p
+
+CREATE DATABASE java_practice_trading;
+USE java_practice_trading;
+
+// to open up the infile access, must reset to 0 once import the tables
+SHOW VARIABLES LIKE 'local_infile';
+SET GLOBAL local_infile = 1;
+
+// restart the sql with the following
+mysql -u root -p --local-infile java_practice_trading
+
+USE java_practice_trading;
+
+CREATE TABLE jpm (Date DATE, Open DOUBLE, High DOUBLE, Low DOUBLE, Close DOUBLE, Adj_Close DOUBLE, Volume DOUBLE);
+SHOW TABLES;
+
+LOAD DATA LOCAL INFILE '/Users/victor/Desktop/Efforts/Projects/JavaPractice/TradingEngine/sample_data/JPM.csv' INTO TABLE jpm
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+CREATE TABLE aapl (Date DATE, Open DOUBLE, High DOUBLE, Low DOUBLE, Close DOUBLE, Adj_Close DOUBLE, Volume DOUBLE);
+SHOW TABLES;
+
+LOAD DATA LOCAL INFILE '/Users/victor/Desktop/Efforts/Projects/JavaPractice/TradingEngine/sample_data/AAPL.csv' INTO TABLE aapl
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+SET GLOBAL local_infile = 0;
