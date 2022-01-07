@@ -17,7 +17,6 @@ import java.util.*;
 
 public class HistoricalMySQLDataHandler implements DataHandler {
 
-    private final List<Event> eventsQueue;
     private final List<String> symbolList;
     private LocalDate currentDate;
     private final int dayIncrement;
@@ -26,9 +25,7 @@ public class HistoricalMySQLDataHandler implements DataHandler {
     private static final Logger logger = LogManager.getLogger(HistoricalMySQLDataHandler.class);
 
     @Inject
-    public HistoricalMySQLDataHandler(@EventQueue List<Event> eventsQueue, @SymbolList List<String> symbolList,
-                                      @CurrentDate LocalDate currentDate, @DayIncrement int dayIncrement) {
-        this.eventsQueue = eventsQueue;
+    public HistoricalMySQLDataHandler(@SymbolList List<String> symbolList, @CurrentDate LocalDate currentDate, @DayIncrement int dayIncrement) {
         this.symbolList = symbolList;
         this.currentDate = currentDate;
         this.dayIncrement = dayIncrement;  // the unit of day increment
@@ -132,7 +129,7 @@ public class HistoricalMySQLDataHandler implements DataHandler {
      * one call for an increment of dayIncrement days;
      * */
     @Override
-    public void updateBar() throws RuntimeException {
+    public void updateBar(List<Event> eventQueue) throws RuntimeException {
         // load config
         Properties prop = new Properties();
         try (InputStream in = new FileInputStream("src/main/resources/config.properties")) {
@@ -168,6 +165,7 @@ public class HistoricalMySQLDataHandler implements DataHandler {
                     ));
                 } else {
                     // one symbol not available
+                    // TODO: replace to flags for each symbol to check whether updated on that day
                     newDataAvailable = false;
                     logger.info("The symbol: {} unavailable on {}", symbol, date);
                 }
@@ -175,17 +173,14 @@ public class HistoricalMySQLDataHandler implements DataHandler {
             // increment date
             currentDate = currentDate.plusDays(dayIncrement);
             // append market event
-            eventsQueue.add(new MarketEvent());
+            // TODO: only add market event if at least one update flag is on
+            eventQueue.add(new MarketEvent());
 
         } catch (SQLException e) {
             e.printStackTrace();
             logger.info("MySQL query failed!");
         }
 
-    }
-
-    public List<Event> getEventsQueue() {
-        return eventsQueue;
     }
 
     public LocalDate getCurrentDate() {

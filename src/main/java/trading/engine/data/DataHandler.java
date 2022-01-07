@@ -1,5 +1,7 @@
 package trading.engine.data;
 
+import trading.engine.event.Event;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,6 @@ public interface DataHandler {
     * Pushes the latest bars to the bars_queue for each symbol in a tuple OHLCVI format: (datetime, open, high, low,
     * close, volume, open interest).
     * */
-    void updateBar();
+    void updateBar(List<Event> eventQueue);
 
 }
