@@ -1,5 +1,6 @@
 package trading.engine.portfolio;
 
+import trading.engine.data.DataHandler;
 import trading.engine.event.*;
 
 import java.time.LocalDate;
@@ -51,4 +52,7 @@ public interface Portfolio {
     Holdings getCurrentHoldings();
 
     List<Holdings> getAllHoldings();
+
+    // for test
+    DataHandler getData();
 }

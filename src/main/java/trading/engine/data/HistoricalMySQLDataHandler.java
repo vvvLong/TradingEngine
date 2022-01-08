@@ -7,6 +7,7 @@ import trading.engine.event.Event;
 import trading.engine.event.MarketEvent;
 import trading.engine.guice.annotation.data.*;
 
+import javax.inject.Singleton;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Singleton
 public class HistoricalMySQLDataHandler implements DataHandler {
 
     private final List<String> symbolList;

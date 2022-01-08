@@ -61,7 +61,7 @@ public class GuiceDemo {
             this.count = count;
         }
 
-        @Inject
+//        @Inject
         void sayHello(@NewMessage String newMsg) {
             for (int i=0; i < count; i++) {
                 System.out.println(message);
@@ -75,21 +75,37 @@ public class GuiceDemo {
         }
     }
 
+    static class GreeterContainer {
+        private Greeter greeter;
+
+        @Inject
+        public GreeterContainer(Greeter greeter) {
+            this.greeter = greeter;
+        }
+
+        public void say() {
+            greeter.sayHello("from the container");
+            System.out.println(greeter.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         /*
          * the constructor or method that annotated with @Inject will both be triggered when call injector.getInstance()
          * the first three "hello world" is a result of calling sayHello when getInstance(), message injected by constructor
          * then message is injected as newMsg as the next call sayHello in getInstance()
          */
+//        Injector injector = Guice.createInjector(new DemoModule());
+//        Greeter greeter = injector.getInstance(Greeter.class);
+//        System.out.println("-----------------");
+//        System.out.println(greeter.getMessage());
+//        System.out.println("-----------------");
+//        greeter.sayHello("no change");
+//        System.out.println(greeter.getMessage());
+
+        // test injection that needs another injection
         Injector injector = Guice.createInjector(new DemoModule());
-
-        Greeter greeter = injector.getInstance(Greeter.class);
-
-        System.out.println("-----------------");
-        System.out.println(greeter.getMessage());
-        System.out.println("-----------------");
-
-        greeter.sayHello("no change");
-        System.out.println(greeter.getMessage());
+        GreeterContainer container = injector.getInstance(GreeterContainer.class);
+        container.say();
     }
 }

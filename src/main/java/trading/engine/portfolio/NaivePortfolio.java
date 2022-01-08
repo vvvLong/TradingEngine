@@ -1,10 +1,15 @@
 package trading.engine.portfolio;
 
+import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import trading.engine.data.BarValueType;
 import trading.engine.data.DataHandler;
+import trading.engine.data.HistoricalMySQLDataHandler;
 import trading.engine.event.*;
+import trading.engine.guice.annotation.data.SymbolList;
+import trading.engine.guice.annotation.portfolio.InitialCapital;
+import trading.engine.guice.annotation.portfolio.StartDate;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -21,7 +26,9 @@ public class NaivePortfolio implements Portfolio{
     private final DataHandler data;
     private final Logger logger = LogManager.getLogger(NaivePortfolio.class);
 
-    public NaivePortfolio(List<String> symbolList, LocalDate startDate, double initialCapital, DataHandler data) {
+    @Inject
+    public NaivePortfolio(@SymbolList List<String> symbolList, @StartDate LocalDate startDate,
+                          @InitialCapital double initialCapital, DataHandler data) {
         this.symbolList = symbolList;
         this.startDate = startDate;
         this.initialCapital = initialCapital;
@@ -169,5 +176,9 @@ public class NaivePortfolio implements Portfolio{
     @Override
     public List<Holdings> getAllHoldings() {
         return allHoldings;
+    }
+
+    public DataHandler getData() {
+        return data;
     }
 }
