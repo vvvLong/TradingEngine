@@ -1,11 +1,15 @@
 package trading.engine.event;
 
+import java.time.LocalDate;
+
 public class MarketEvent implements Event{
 
     private final EventType eventType;
+    private final LocalDate timeStamp;
 
-    public MarketEvent() {
+    public MarketEvent(LocalDate timeStamp) {
         this.eventType = EventType.MARKET;
+        this.timeStamp = timeStamp;
     }
 
     @Override
@@ -13,9 +17,15 @@ public class MarketEvent implements Event{
         return eventType;
     }
 
-    @Override
-    public String toString() {
-        return "MarketEvent{}";
+    public LocalDate getTimeStamp() {
+        return timeStamp;
     }
 
+    @Override
+    public String toString() {
+        return "MarketEvent{" +
+                "eventType=" + eventType +
+                ", timeStamp=" + timeStamp +
+                '}';
+    }
 }

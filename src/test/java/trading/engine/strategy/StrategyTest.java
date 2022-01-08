@@ -8,7 +8,6 @@ import trading.engine.data.DataBar;
 import trading.engine.data.DataHandler;
 import trading.engine.data.HistoricalMySQLDataHandler;
 import trading.engine.event.Event;
-import trading.engine.event.MarketEvent;
 import trading.engine.guice.module.DataModule;
 import trading.engine.guice.module.StrategyModule;
 
@@ -21,7 +20,6 @@ public class StrategyTest {
     private final List<Event> queue = new ArrayList<>();
     private DataHandler data;
     private Strategy strategy;
-    private String symbol = "aapl";
 
     @BeforeEach
     public void setup() {
@@ -35,6 +33,7 @@ public class StrategyTest {
         int size = 0;
         for (int i = 0; i < 50; i++) {
             data.updateBar(queue);
+            String symbol = "aapl";
             if (data.getLatestBars(symbol, Integer.MAX_VALUE).isPresent()) {
                 int newSize = data.getLatestBars(symbol, Integer.MAX_VALUE).get().size();
                 if (newSize > size){  // make sure new bar is added

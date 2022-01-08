@@ -11,8 +11,9 @@ public class FillEvent implements Event{
     private final DirectionType directionType;
     private final double fillValue;  // total value of the filled positions
     private final double fillCost;  // total trading cost of the fill
+    private final int fillQuantity;
 
-    public FillEvent(Date timestamp, String exchange, String symbol, DirectionType directionType, double fillValue, double fillCost) {
+    public FillEvent(Date timestamp, String exchange, String symbol, DirectionType directionType, double fillValue, double fillCost, int fillQuantity) {
         this.eventType = EventType.FILL;
         this.timestamp = timestamp;
         this.exchange = exchange;
@@ -20,6 +21,7 @@ public class FillEvent implements Event{
         this.directionType = directionType;
         this.fillValue = fillValue;
         this.fillCost = fillCost;
+        this.fillQuantity = fillQuantity;
     }
 
     @Override
@@ -49,6 +51,10 @@ public class FillEvent implements Event{
 
     public double getFillCost() {
         return fillCost;
+    }
+
+    public int getFillQuantity() {
+        return fillQuantity;
     }
 
     @Override
