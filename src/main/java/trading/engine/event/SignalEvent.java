@@ -1,20 +1,21 @@
 package trading.engine.event;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class SignalEvent implements Event {
     private final EventType eventType;
-    private final String strategyID;
+    private final LocalDate timestamp;
     private final String symbol;
-    private final LocalDate timeStamp;
+    private final String strategyID;
     private final DirectionType directionType;
     private final double strength;
 
-    public SignalEvent(String strategyID, String symbol, LocalDate timeStamp, DirectionType directionType, double strength) {
+    public SignalEvent(LocalDate timestamp, String symbol, String strategyID, DirectionType directionType, double strength) {
         this.eventType = EventType.SIGNAL;
         this.strategyID = strategyID;
         this.symbol = symbol;
-        this.timeStamp = timeStamp;
+        this.timestamp = timestamp;
         this.directionType = directionType;
         this.strength = strength;
     }
@@ -24,16 +25,18 @@ public class SignalEvent implements Event {
         return eventType;
     }
 
-    public String getStrategyID() {
-        return strategyID;
+    @Override
+    public LocalDate getTimestamp() {
+        return timestamp;
     }
 
+    @Override
     public String getSymbol() {
         return symbol;
     }
 
-    public LocalDate getTimeStamp() {
-        return timeStamp;
+    public String getStrategyID() {
+        return strategyID;
     }
 
     public DirectionType getDirectionType() {
@@ -45,12 +48,25 @@ public class SignalEvent implements Event {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SignalEvent that = (SignalEvent) o;
+        return Double.compare(that.strength, strength) == 0 && eventType == that.eventType && Objects.equals(timestamp, that.timestamp) && Objects.equals(symbol, that.symbol) && Objects.equals(strategyID, that.strategyID) && directionType == that.directionType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventType, timestamp, symbol, strategyID, directionType, strength);
+    }
+
+    @Override
     public String toString() {
         return "SignalEvent{" +
                 "eventType=" + eventType +
-                ", strategyID='" + strategyID + '\'' +
+                ", timeStamp=" + timestamp +
                 ", symbol='" + symbol + '\'' +
-                ", timeStamp=" + timeStamp +
+                ", strategyID='" + strategyID + '\'' +
                 ", directionType=" + directionType +
                 ", strength=" + strength +
                 '}';

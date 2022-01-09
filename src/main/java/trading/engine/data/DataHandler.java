@@ -1,44 +1,72 @@
 package trading.engine.data;
 
 import trading.engine.event.Event;
+import trading.engine.event.EventQueues;
+import trading.engine.event.MarketEvent;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public interface DataHandler {
 
     /*
-    * Returns the last bar updated.
-    */
-    Optional<DataBar> getLatestBar(String symbol);
+     * Returns a bar of the symbol on the date
+     */
+    Optional<DataBar> fetchBarOn(String symbol, LocalDate date);
 
     /*
-    * Returns the last N bars updated.
-    * Latest bar appends to the latest of the list
+    * Returns the last N available bars ended at timestamp
     */
-    Optional<List<DataBar>> getLatestBars(String symbol, int numOfBars);
+    Optional<List<DataBar>> fetchNBarsUntil(String symbol, int numOfBars, LocalDate end);
 
     /*
-    Returns a Date object for the last bar.
-    */
-    Optional<LocalDate> getLatestBarDate(String symbol);
+     * Returns available bars between the two timestamps
+     */
+    Optional<List<DataBar>> fetchBarsBetween(String symbol, LocalDate start, LocalDate end);
 
     /*
-    Returns one of the Open, High, Low, Close, Volume, adj Close, open interest from the last bar.
-    */
-    Optional<Double> getLatestBarValue(String symbol, BarValueType valueType);
+     * fetch a bar specified by market event
+     */
+    Optional<DataBar> fetchBarByME(MarketEvent event);
 
     /*
-    * Returns the last N bar values from the latest_symbol list, or N-k if less available.
-    * Latest bar appends to the latest of the list
+    * Pushes the latest bars to the data buffer and generate market events into event queue
+    */
+    void update(EventQueues queue);
+
+    /*
+    * convert list of bars into list of a specified value
     * */
-    Optional<List<Double>> getLatestBarValues(String symbol, BarValueType valueType, int numOfBars);
+    default List<Double> bars2Values(List<DataBar> bars, BarValueType type) {
+        ArrayList<Double> res = new ArrayList<>();
+        for (DataBar bar : bars) {
+            res.add(bar.getBarVal(type));
+        }
+        return res;
+    }
 
     /*
-    * Pushes the latest bars to the bars_queue for each symbol in a tuple OHLCVI format: (datetime, open, high, low,
-    * close, volume, open interest).
-    * */
-    void updateBar(List<Event> eventQueue);
+     * convert list of bars into list of time
+     * */
+    default List<LocalDate> bars2Timestamps(List<DataBar> bars) {
+        ArrayList<LocalDate> res = new ArrayList<>();
+        for (DataBar bar : bars) {
+            res.add(bar.getTimestamp());
+        }
+        return res;
+    }
+
+    /*
+     * convert list of bars into list of symbol
+     * */
+    default List<String> bars2Symbol(List<DataBar> bars) {
+        ArrayList<String> res = new ArrayList<>();
+        for (DataBar bar : bars) {
+            res.add(bar.getSymbol());
+        }
+        return res;
+    }
 
 }

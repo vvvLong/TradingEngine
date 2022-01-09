@@ -6,17 +6,13 @@ import trading.engine.event.Event;
 import trading.engine.guice.annotation.data.*;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class DataModule extends AbstractModule {
-
-    @Provides
-    @EventQueue
-    public static List<Event> provideEventQueue() {
-        return new ArrayList<>();
-    }
 
     @Provides
     @SymbolList
@@ -25,15 +21,15 @@ public class DataModule extends AbstractModule {
     }
 
     @Provides
-    @CurrentDate
-    public static LocalDate provideCurrentDate() {
+    @StartDate
+    public static LocalDate provideStartDate() {
         return LocalDate.of(2021, 1, 15);
     }
 
     @Provides
-    @DayIncrement
-    public static int provideDayIncrement() {
-        return 1;
+    @TimeDelta
+    public static TemporalAmount provideTimeDelta() {
+        return Period.ofDays(1);
     }
 
 }
