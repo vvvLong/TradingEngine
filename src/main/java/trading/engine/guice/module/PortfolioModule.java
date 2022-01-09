@@ -20,7 +20,7 @@ public class PortfolioModule extends AbstractModule {
     @Provides
     @StartDate
     public LocalDate provideStartDate() {
-        return LocalDate.of(2021, 2, 1);
+        return LocalDate.of(2021, 1, 1);
     }
 
     @Provides

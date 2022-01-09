@@ -176,7 +176,7 @@ public class HistoricalMySQLDataHandler implements DataHandler {
             currentDate = currentDate.plusDays(dayIncrement);
             // append market event
             // TODO: only add market event if at least one update flag is on
-            eventQueue.add(new MarketEvent(getLatestBarDate(symbolList.get(0)).get()));
+            eventQueue.add(new MarketEvent());
 
         } catch (SQLException e) {
             e.printStackTrace();

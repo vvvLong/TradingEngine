@@ -13,7 +13,7 @@ public class EventTest {
     @Test
     @DisplayName("event should be printed correctly")
     public void printMarketEvent() {
-        Event e = new MarketEvent(LocalDate.of(2022, 1, 1));
+        Event e = new MarketEvent();
         System.out.print(e);
         System.out.print("\n");
     }
@@ -29,7 +29,7 @@ public class EventTest {
     @Test
     @DisplayName("event should be printed correctly")
     public void printFillEvent() {
-        Event e = new FillEvent( new Date(),"NASDAQ", "AAPL", DirectionType.LONG, 1000, 10, 10);
+        Event e = new FillEvent( LocalDate.now(),"NASDAQ", "AAPL", DirectionType.LONG, 1000, 10, 10);
         System.out.print(e);
         System.out.print("\n");
     }
@@ -37,9 +37,9 @@ public class EventTest {
     @Test
     @DisplayName("event queue should be printed correctly")
     public void printEventQueue() {
-        Event e1 = new MarketEvent(LocalDate.of(2022, 1, 2));
+        Event e1 = new MarketEvent();
         Event e2 = new OrderEvent(OrderType.LIMIT, "AAPL", DirectionType.LONG, 10);
-        Event e3 = new FillEvent( new Date(),"NASDAQ", "AAPL", DirectionType.LONG, 1000, 10, 10);
+        Event e3 = new FillEvent( LocalDate.now(),"NASDAQ", "AAPL", DirectionType.LONG, 1000, 10, 10);
         List<Event> list = new ArrayList<>();
         list.add(e1);
         list.add(e2);

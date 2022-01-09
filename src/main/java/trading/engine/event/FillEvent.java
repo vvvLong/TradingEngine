@@ -1,11 +1,14 @@
 package trading.engine.event;
 
+import com.google.inject.Inject;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 public class FillEvent implements Event{
 
     private final EventType eventType;
-    private final Date timestamp;
+    private final LocalDate timestamp;
     private final String exchange;
     private final String symbol;
     private final DirectionType directionType;
@@ -13,7 +16,8 @@ public class FillEvent implements Event{
     private final double fillCost;  // total trading cost of the fill
     private final int fillQuantity;
 
-    public FillEvent(Date timestamp, String exchange, String symbol, DirectionType directionType, double fillValue, double fillCost, int fillQuantity) {
+    @Inject
+    public FillEvent(LocalDate timestamp, String exchange, String symbol, DirectionType directionType, double fillValue, double fillCost, int fillQuantity) {
         this.eventType = EventType.FILL;
         this.timestamp = timestamp;
         this.exchange = exchange;
@@ -29,7 +33,7 @@ public class FillEvent implements Event{
         return eventType;
     }
 
-    public Date getTimestamp() {
+    public LocalDate getTimestamp() {
         return timestamp;
     }
 

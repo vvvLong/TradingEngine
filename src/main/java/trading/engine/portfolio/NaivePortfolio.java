@@ -181,4 +181,17 @@ public class NaivePortfolio implements Portfolio{
     public DataHandler getData() {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return "NaivePortfolio{" +
+                "symbolList=" + symbolList +
+                ", startDate=" + startDate +
+                ", initialCapital=" + initialCapital +
+                ", currentPositions=" + currentPositions +
+                ", allPositions=" + allPositions +
+                ", currentHoldings=" + currentHoldings +
+                ", allHoldings=" + allHoldings +
+                '}';
+    }
 }
