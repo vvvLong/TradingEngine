@@ -10,8 +10,8 @@ import trading.engine.data.DataHandler;
 import trading.engine.data.HistoricalMySQLDataHandler;
 import trading.engine.event.EventQueues;
 import trading.engine.event.SignalEvent;
-import trading.engine.guice.module.DataModule;
-import trading.engine.guice.module.StrategyModule;
+import trading.engine.injection.module.DataModule;
+import trading.engine.injection.module.StrategyModule;
 
 import java.util.Optional;
 

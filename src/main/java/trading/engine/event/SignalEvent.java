@@ -1,5 +1,7 @@
 package trading.engine.event;
 
+import com.google.inject.Inject;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -11,6 +13,7 @@ public class SignalEvent implements Event {
     private final DirectionType directionType;
     private final double strength;
 
+    @Inject
     public SignalEvent(LocalDate timestamp, String symbol, String strategyID, DirectionType directionType, double strength) {
         this.eventType = EventType.SIGNAL;
         this.strategyID = strategyID;

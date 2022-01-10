@@ -1,11 +1,11 @@
-package trading.engine.guice.module;
+package trading.engine.injection.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import trading.engine.guice.annotation.strategy.LongWindow;
-import trading.engine.guice.annotation.strategy.ShortWindow;
-import trading.engine.guice.annotation.strategy.Smoothing;
-import trading.engine.guice.annotation.strategy.Symbol;
+import trading.engine.injection.annotation.strategy.LongWindow;
+import trading.engine.injection.annotation.strategy.ShortWindow;
+import trading.engine.injection.annotation.strategy.Smoothing;
+import trading.engine.injection.annotation.strategy.Symbol;
 
 public class StrategyModule extends AbstractModule {
 

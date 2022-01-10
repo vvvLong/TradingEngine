@@ -1,4 +1,4 @@
-package trading.engine.guice.annotation.strategy;
+package trading.engine.injection.annotation.strategy;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;

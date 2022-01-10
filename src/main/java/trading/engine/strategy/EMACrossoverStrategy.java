@@ -9,10 +9,10 @@ import trading.engine.data.DataHandler;
 import trading.engine.event.DirectionType;
 import trading.engine.event.MarketEvent;
 import trading.engine.event.SignalEvent;
-import trading.engine.guice.annotation.strategy.LongWindow;
-import trading.engine.guice.annotation.strategy.ShortWindow;
-import trading.engine.guice.annotation.strategy.Smoothing;
-import trading.engine.guice.annotation.strategy.Symbol;
+import trading.engine.injection.annotation.strategy.LongWindow;
+import trading.engine.injection.annotation.strategy.ShortWindow;
+import trading.engine.injection.annotation.strategy.Smoothing;
+import trading.engine.injection.annotation.strategy.Symbol;
 
 import java.util.Optional;
 

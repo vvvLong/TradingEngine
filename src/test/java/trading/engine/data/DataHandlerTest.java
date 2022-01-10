@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import trading.engine.event.EventQueues;
 import trading.engine.event.MarketEvent;
-import trading.engine.guice.module.DataModule;
+import trading.engine.injection.module.DataModule;
 
 import java.time.LocalDate;
 import java.util.List;

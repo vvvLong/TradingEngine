@@ -1,4 +1,4 @@
-package trading.engine.guice.annotation.strategy;
+package trading.engine.injection.annotation.portfolio;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
@@ -7,5 +7,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Qualifier
 @Retention(RUNTIME)
-public @interface Symbol {
+public @interface InitialCapital {
 }

@@ -6,10 +6,10 @@ import org.junit.jupiter.api.*;
 import trading.engine.data.DataHandler;
 import trading.engine.data.HistoricalMySQLDataHandler;
 import trading.engine.event.*;
-import trading.engine.guice.module.DataModule;
-import trading.engine.guice.module.EventModule;
-import trading.engine.guice.module.PortfolioModule;
-import trading.engine.guice.module.StrategyModule;
+import trading.engine.injection.module.DataModule;
+import trading.engine.injection.module.EventModule;
+import trading.engine.injection.module.PortfolioModule;
+import trading.engine.injection.module.StrategyModule;
 
 public class PortfolioTest {
 

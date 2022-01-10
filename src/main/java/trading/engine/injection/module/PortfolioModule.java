@@ -1,9 +1,11 @@
-package trading.engine.guice.module;
+package trading.engine.injection.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import trading.engine.guice.annotation.portfolio.InitialCapital;
-import trading.engine.guice.annotation.portfolio.PortfolioID;
+import trading.engine.injection.annotation.portfolio.InitialCapital;
+import trading.engine.injection.annotation.portfolio.PortfolioID;
+import trading.engine.portfolio.NaivePortfolio;
+import trading.engine.portfolio.Portfolio;
 
 public class PortfolioModule extends AbstractModule {
 
@@ -18,5 +20,8 @@ public class PortfolioModule extends AbstractModule {
     public double provideInitialCapital() {
         return 1_000_000.;
     }
+
+    @Provides
+    public Portfolio providePortfolio(NaivePortfolio impl) { return impl; }
 
 }

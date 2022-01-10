@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import trading.engine.event.EventQueues;
 import trading.engine.event.MarketEvent;
-import trading.engine.guice.annotation.data.*;
+import trading.engine.injection.annotation.data.*;
 
 import javax.inject.Singleton;
 import java.io.FileInputStream;

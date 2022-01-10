@@ -1,12 +1,10 @@
-package trading.engine.guice.module;
+package trading.engine.injection.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import trading.engine.data.DataBar;
 import trading.engine.data.DataHandler;
 import trading.engine.data.HistoricalMySQLDataHandler;
-import trading.engine.event.Event;
-import trading.engine.guice.annotation.data.*;
+import trading.engine.injection.annotation.data.*;
 
 import java.time.LocalDate;
 import java.time.Period;

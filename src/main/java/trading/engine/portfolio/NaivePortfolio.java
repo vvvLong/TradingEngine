@@ -7,14 +7,16 @@ import trading.engine.data.BarValueType;
 import trading.engine.data.DataBar;
 import trading.engine.data.DataHandler;
 import trading.engine.event.*;
-import trading.engine.guice.annotation.data.StartDate;
-import trading.engine.guice.annotation.portfolio.InitialCapital;
-import trading.engine.guice.annotation.portfolio.PortfolioID;
+import trading.engine.injection.annotation.data.StartDate;
+import trading.engine.injection.annotation.portfolio.InitialCapital;
+import trading.engine.injection.annotation.portfolio.PortfolioID;
 
 
+import javax.inject.Singleton;
 import java.time.LocalDate;
 import java.util.*;
 
+@Singleton
 public class NaivePortfolio implements Portfolio {
     private final String portfolioID;
     private final LocalDate startDate;
