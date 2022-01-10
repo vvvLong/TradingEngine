@@ -5,14 +5,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import trading.engine.data.BarValueType;
 import trading.engine.data.DataBar;
+import trading.engine.data.DataHandler;
 import trading.engine.event.DirectionType;
+import trading.engine.event.MarketEvent;
 import trading.engine.event.SignalEvent;
 import trading.engine.guice.annotation.strategy.LongWindow;
 import trading.engine.guice.annotation.strategy.ShortWindow;
 import trading.engine.guice.annotation.strategy.Smoothing;
 import trading.engine.guice.annotation.strategy.Symbol;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 /*
@@ -31,11 +32,13 @@ public class EMACrossoverStrategy implements Strategy {
     private double longEMA;
     private double shortEMA;
     private final String symbol;
-    private final String strategyName;
+    private final String strategyID;
+    private final DataHandler data;
     private static final Logger logger = LogManager.getLogger(EMACrossoverStrategy.class);
 
     @Inject
-    public EMACrossoverStrategy(@Smoothing double smoothing, @LongWindow int longWindow, @ShortWindow int shortWindow, @Symbol String symbol) {
+    public EMACrossoverStrategy(@Symbol String symbol, @Smoothing double smoothing, @LongWindow int longWindow,
+                                @ShortWindow int shortWindow, DataHandler data) {
         checkArgs(smoothing, longWindow, shortWindow);
         this.longWindow = longWindow;
         this.shortWindow = shortWindow;
@@ -46,7 +49,8 @@ public class EMACrossoverStrategy implements Strategy {
         this.shortWarmup = -shortWindow;
         this.longEMA = 0.;
         this.shortEMA = 0.;
-        this.strategyName = String.format("EMACrossover(%s, %s, %s)-%s", shortWindow, longWindow, smoothing, symbol);
+        this.strategyID = String.format("EMACrossover(%s, %s, %s)-%s", shortWindow, longWindow, smoothing, symbol);
+        this.data = data;
     }
 
     private void checkArgs(double smoothing, int longWindow, int shortWindow) {
@@ -72,7 +76,7 @@ public class EMACrossoverStrategy implements Strategy {
         }
     }
 
-    private void calLongEMA(double price) {
+    private void calcLongEMA(double price) {
         if (longWarmup < 0) {  // accumulate sum if days not enough
             longEMA += price;
             longWarmup++;
@@ -84,7 +88,7 @@ public class EMACrossoverStrategy implements Strategy {
         }
     }
 
-    private void calShortEMA(double price) {
+    private void calcShortEMA(double price) {
         if (shortWarmup < 0) {  // accumulate sum if days not enough
             shortEMA += price;
             shortWarmup++;
@@ -97,12 +101,23 @@ public class EMACrossoverStrategy implements Strategy {
     }
 
     @Override
-    public Optional<SignalEvent> generateSignal(DataBar bar) {
-        calLongEMA(bar.getBarVal(BarValueType.CLOSE));
-        calShortEMA(bar.getBarVal(BarValueType.CLOSE));
+    public Optional<SignalEvent> generateSignal(MarketEvent event) {
+        if (!event.getSymbol().equals(symbol)) {
+            logger.warn("the event {} is not compatible with strategy {}!", event, strategyID);
+            return Optional.empty();
+        }
+
+        Optional<DataBar> barOptional = data.fetchBarByME(event);
+        if (!barOptional.isPresent()) {
+            return Optional.empty();
+        }
+
+        DataBar bar = barOptional.get();
+        calcLongEMA(bar.getBarVal(BarValueType.CLOSE));
+        calcShortEMA(bar.getBarVal(BarValueType.CLOSE));
 
         if (longWarmup < 0 || shortWarmup < 0) {
-            logger.info("calling generateSignal() before warmup period");
+            logger.info("calling generateSignal() in warmup period");
             return Optional.empty();
         }
 
@@ -116,7 +131,21 @@ public class EMACrossoverStrategy implements Strategy {
             strength = 1 - shortEMA / longEMA;
         }
 
-        return Optional.of(new SignalEvent(strategyName, symbol, LocalDate.now(), direction, strength));
+        // signal sending on the same date as the event
+        return Optional.of(new SignalEvent(event.getTimestamp(), symbol, strategyID,  direction, strength));
     }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
+    @Override
+    public String getStrategyID() {
+        return strategyID;
+    }
+
+    /*for test*/
+    public DataHandler getData() {
+        return data;
+    }
 }

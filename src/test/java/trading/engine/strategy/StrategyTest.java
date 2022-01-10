@@ -2,12 +2,17 @@ package trading.engine.strategy;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import trading.engine.data.DataBar;
 import trading.engine.data.DataHandler;
 import trading.engine.data.HistoricalMySQLDataHandler;
 import trading.engine.event.Event;
+import trading.engine.event.EventQueues;
+import trading.engine.event.MarketEvent;
+import trading.engine.event.SignalEvent;
 import trading.engine.guice.module.DataModule;
 import trading.engine.guice.module.StrategyModule;
 
@@ -17,7 +22,7 @@ import java.util.Optional;
 
 public class StrategyTest {
 
-    private final List<Event> queue = new ArrayList<>();
+    private final EventQueues queues = EventQueues.INSTANCE;
     private DataHandler data;
     private Strategy strategy;
 
@@ -29,20 +34,26 @@ public class StrategyTest {
     }
 
     @Test
+    @DisplayName("data should be singleton")
+    public void singletonTest() {
+        Assertions.assertEquals(data, ((EMACrossoverStrategy) strategy).getData());
+    }
+
+    @Test
+    @DisplayName("generate correct signal")
     public void signalTest() {
-        int size = 0;
+        // generate signals
         for (int i = 0; i < 50; i++) {
-            data.updateBar(queue);
-            String symbol = "aapl";
-            if (data.getLatestBars(symbol, Integer.MAX_VALUE).isPresent()) {
-                int newSize = data.getLatestBars(symbol, Integer.MAX_VALUE).get().size();
-                if (newSize > size){  // make sure new bar is added
-                    Optional<DataBar> bar = data.getLatestBar(symbol);
-                    System.out.println(bar);
-                    bar.ifPresent(dataBar -> System.out.println(strategy.generateSignal(dataBar)));
-                    size = newSize;
-                }
+            data.update(queues);
+            while (!queues.marketQueue.isEmpty()) {
+                Optional<SignalEvent> signal = strategy.generateSignal(queues.marketQueue.poll());
+                signal.ifPresent(queues.signalQueue::add);
             }
+        }
+
+        System.out.println("*********** Signal Queue ***************");
+        for(SignalEvent s : queues.signalQueue){
+            System.out.println(s);
         }
     }
 

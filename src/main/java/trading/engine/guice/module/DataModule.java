@@ -2,6 +2,9 @@ package trading.engine.guice.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import trading.engine.data.DataBar;
+import trading.engine.data.DataHandler;
+import trading.engine.data.HistoricalMySQLDataHandler;
 import trading.engine.event.Event;
 import trading.engine.guice.annotation.data.*;
 
@@ -31,5 +34,8 @@ public class DataModule extends AbstractModule {
     public static TemporalAmount provideTimeDelta() {
         return Period.ofDays(1);
     }
+
+    @Provides
+    public static DataHandler provideDataHandler(HistoricalMySQLDataHandler impl) { return impl; }
 
 }
