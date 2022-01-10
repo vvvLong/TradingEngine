@@ -1,19 +1,15 @@
 package trading.engine.data;
 
-import com.google.common.net.HostAndPort;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sun.xml.internal.ws.util.xml.CDATA;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import trading.engine.event.Event;
 import trading.engine.event.EventQueues;
 import trading.engine.event.MarketEvent;
 import trading.engine.guice.module.DataModule;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

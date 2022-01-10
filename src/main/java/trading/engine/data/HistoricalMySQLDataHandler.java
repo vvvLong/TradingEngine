@@ -128,6 +128,43 @@ public class HistoricalMySQLDataHandler implements DataHandler {
         return Optional.of(res);
     }
 
+    private Optional<List<DataBar>> fetchBetween(String symbol, LocalDate start, LocalDate end) {
+        List<DataBar> res = new ArrayList<>();
+        int count = 0;
+        String startS = start.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String endS = end.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String sql = "SELECT * FROM " + symbol + " WHERE DATE BETWEEN '" + startS + "' AND '" + endS + "'";
+        try (Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                 res.add(new DataBar(
+                        LocalDate.parse(rs.getString("Date")),
+                        symbol,
+                        rs.getDouble("Open"),
+                        rs.getDouble("High"),
+                        rs.getDouble("Low"),
+                        rs.getDouble("Close"),
+                        rs.getDouble("Adj_Close"),
+                        rs.getDouble("Volume")
+                 ));
+                 count++;
+            }
+
+            if (count==0) {
+                logger.info("The symbol: {} unavailable between {} and {}", symbol, startS, endS);
+                return Optional.empty();
+            } else {
+                Collections.sort(res);
+                return Optional.of(res);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("MySQL connection failed");
+            return Optional.empty();
+        }
+    }
+
     @Override
     public Optional<List<DataBar>> fetchBarsBetween(String symbol, LocalDate start, LocalDate end) {
         if (end.isAfter(currentDate)) {
@@ -138,23 +175,7 @@ public class HistoricalMySQLDataHandler implements DataHandler {
             logger.info("data of {} started at {} is not available, the earliest available date is {}", symbol, start, startDate);
             return Optional.empty();
         }
-        List<DataBar> res = new ArrayList<>();
-        LocalDate date = start;
-        int count = 0;
-        while ((date.isBefore(end) || date.isEqual(end)) && (date.isAfter(start) || date.isEqual(start))) {
-            Optional<DataBar> bar = fetchBarOn(symbol, date);
-            if (bar.isPresent()) {
-                count++;
-                res.add(bar.get());
-            }
-            date = date.plus(timeDelta);
-        }
-        if (count == 0) {
-            return Optional.empty();
-        } else {
-            Collections.sort(res);
-            return Optional.of(res);
-        }
+        return fetchBetween(symbol, start, end);
     }
 
     @Override
