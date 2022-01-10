@@ -30,7 +30,8 @@ public class HistoricalMySQLDataHandler implements DataHandler {
     private boolean firstDataPresented = false;  // flag to check if first data come through
 
     @Inject
-    public HistoricalMySQLDataHandler(@SymbolList List<String> symbolList, @StartDate LocalDate startDate, @TimeDelta TemporalAmount timeDelta) throws SQLException {
+    public HistoricalMySQLDataHandler(@SymbolList List<String> symbolList, @StartDate LocalDate startDate,
+                                      @TimeDelta TemporalAmount timeDelta) throws SQLException {
         this.symbolList = symbolList;
         this.startDate = startDate;
         this.currentDate = startDate;

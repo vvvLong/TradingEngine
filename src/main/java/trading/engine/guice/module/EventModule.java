@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class EventModule extends AbstractModule {
     @Provides
     public FillEvent provideFillEvent() {
-        return new FillEvent(LocalDate.of(2021, 2, 1), "NYSE", "jpm",
-                DirectionType.LONG, 10000, 10, 100);
+        return new FillEvent(LocalDate.of(2021, 1, 25), "jpm", DirectionType.SHORT,
+                 100, 200, 100, "NYSE");
     }
 }

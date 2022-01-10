@@ -6,18 +6,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import trading.engine.data.DataBar;
 import trading.engine.data.DataHandler;
 import trading.engine.data.HistoricalMySQLDataHandler;
-import trading.engine.event.Event;
 import trading.engine.event.EventQueues;
-import trading.engine.event.MarketEvent;
 import trading.engine.event.SignalEvent;
 import trading.engine.guice.module.DataModule;
 import trading.engine.guice.module.StrategyModule;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class StrategyTest {

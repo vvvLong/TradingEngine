@@ -19,29 +19,15 @@ public interface Portfolio {
     * current market data at this stage is known (OHLCV).
     * Makes use of a MarketEvent from the events queue.
     * */
-    void updateTimestamp(MarketEvent event);
+    void updateByME(MarketEvent event);
 
     /*
-    * Updates the portfolio current positions and holdings from a FillEvent.
+    * Updates the portfolio current positions from a FillEvent.
     * */
-    void updateFill(FillEvent event);
+    void updateByFE(FillEvent event);
 
-    /*
-    * generate Order Event
-    * */
-    OrderEvent generateOrder(SignalEvent event);
-
-    /*
-    * calls the generateOrder method and adds the generated order to the events queue
-    * */
-    void updateSignal(SignalEvent event, List<Event> queue);
-
-    /*
-    * getters
-    * */
-    List<String> getSymbolList();
-
-    LocalDate getStartDate();
+    /*getters*/
+    String getPortfolioID();
 
     double getInitialCapital();
 
@@ -49,10 +35,6 @@ public interface Portfolio {
 
     List<Positions> getAllPositions();
 
-    Holdings getCurrentHoldings();
+    LocalDate getStartDate();
 
-    List<Holdings> getAllHoldings();
-
-    // for test
-    DataHandler getData();
 }
