@@ -18,9 +18,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.TemporalAmount;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class NaiveBacktest implements Backtest {
 
@@ -60,36 +58,52 @@ public class NaiveBacktest implements Backtest {
 
     @Override
     public void run() {
+        
         LocalDate today = stateDate;
+        
         // loop through the back test periods
-        while (!today.isAfter(endDate)) {
-            // market feeds data
+        while (today.isBefore(endDate)) {
+            
+            // enter the next date
+            today = today.plus(timeDelta);
+            // market feeds data, today's data available, assume we are standing at the end of the day
             data.update(events);
+            
             // process all market events
             while (!events.marketQueue.isEmpty()) {
                 MarketEvent marketEvent = events.marketQueue.poll();
-                // update portfolio for new price feeds
+                // update portfolio for the close prices
                 portfolio.updateByME(marketEvent);
-                // generate signals for today
+                // generate signals by the latest prices
                 strategy.generateSignal(marketEvent).ifPresent((e) -> events.signalQueue.add(e));
+
+                // try to execute remaining orders on new open prices
+                Queue<OrderEvent> remainings = new ArrayDeque<>();
+                while (!events.orderQueue.isEmpty()) {
+                    OrderEvent orderEvent = events.orderQueue.poll();
+                    Optional<FillEvent> fill = execution.execute(orderEvent, marketEvent);
+                    if (fill.isPresent()) {
+                        events.fillQueue.add(fill.get());
+                    } else {
+                        remainings.add(orderEvent);
+                    }
+                }
+                events.orderQueue.addAll(remainings);
+                
             }
-            // process all order events
-            while (!events.orderQueue.isEmpty()) {
-                OrderEvent orderEvent = events.orderQueue.poll();
-                events.fillQueue.add(execution.execute(orderEvent));
-            }
-            // process all fill events
+            
+            // update portfolio for trades that filled today ()
             while (!events.fillQueue.isEmpty()) {
                 FillEvent fillEvent = events.fillQueue.poll();
                 portfolio.updateByFE(fillEvent);
             }
-            // process all signal events
+            
+            // converts all signals into today's orders
             while (!events.signalQueue.isEmpty()) {
                 SignalEvent signalEvent = events.signalQueue.poll();
                 order.generateOrder(signalEvent).ifPresent((e) -> events.orderQueue.add(e));
             }
-            // enter the next date
-            today = today.plus(timeDelta);
+
         }
     }
 

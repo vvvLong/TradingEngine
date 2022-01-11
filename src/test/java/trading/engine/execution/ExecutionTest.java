@@ -42,7 +42,8 @@ public class ExecutionTest {
         updateMarket(30);
         System.out.println("-------- order date --------");
         System.out.println(order.getTimestamp());
-        FillEvent fill = execution.execute(order);
+        FillEvent fill = execution.execute(
+                order, new MarketEvent(order.getTimestamp(), order.getSymbol())).orElse(null);
         System.out.println("-------- fill --------");
         System.out.println(fill);
         System.out.println("-------- bar --------");
