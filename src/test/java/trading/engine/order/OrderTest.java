@@ -15,7 +15,7 @@ import trading.engine.injection.module.PortfolioModule;
 import trading.engine.portfolio.Portfolio;
 
 public class OrderTest {
-    private OrderManager order;
+    private OrderHandler order;
     private SignalEvent signal;
     private DataHandler data;
     private Injector injector = Guice.createInjector(new EventModule(), new PortfolioModule(), new DataModule());
@@ -24,7 +24,7 @@ public class OrderTest {
 
     @BeforeEach
     public void setup() {
-        order = injector.getInstance(NaiveOrderManager.class);
+        order = injector.getInstance(NaiveOrderHandler.class);
         signal = injector.getInstance(SignalEvent.class);
         data = injector.getInstance(DataHandler.class);
         portfolio = injector.getInstance(Portfolio.class);

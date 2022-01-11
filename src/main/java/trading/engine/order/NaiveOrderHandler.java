@@ -14,14 +14,14 @@ import trading.engine.portfolio.Portfolio;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class NaiveOrderManager implements OrderManager {
+public class NaiveOrderHandler implements OrderHandler {
 
     private final Portfolio portfolio;
     private final DataHandler data;
-    private final Logger logger = LogManager.getLogger(NaiveOrderManager.class);
+    private final Logger logger = LogManager.getLogger(NaiveOrderHandler.class);
 
     @Inject
-    public NaiveOrderManager(Portfolio portfolio, DataHandler data) {
+    public NaiveOrderHandler(Portfolio portfolio, DataHandler data) {
         this.portfolio = portfolio;
         this.data = data;
     }

@@ -221,4 +221,8 @@ public class HistoricalMySQLDataHandler implements DataHandler {
                 "\ncurrentDate=" + currentDate +
                 "\n}";
     }
+
+    public TemporalAmount getTimeDelta() {
+        return timeDelta;
+    }
 }
