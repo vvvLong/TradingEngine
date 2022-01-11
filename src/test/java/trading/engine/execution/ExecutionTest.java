@@ -36,7 +36,6 @@ public class ExecutionTest {
         }
     }
 
-
     @Test
     @DisplayName("generate correct order")
     public void executeTest() {

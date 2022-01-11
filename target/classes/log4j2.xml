@@ -4,6 +4,7 @@
     <Properties>
         <Property name="filename_TryLog">logs/TryLog.log</Property>
         <Property name="filename_test">logs/test.log</Property>
+        <Property name="main">logs/main.log</Property>
     </Properties>
 
     <Appenders>
@@ -16,6 +17,11 @@
             </PatternLayout>
         </File>
         <File name="File_test" fileName="${filename_test}">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="main" fileName="${main}">
             <PatternLayout>
                 <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
             </PatternLayout>
@@ -33,6 +39,10 @@
         <Logger name="trading.engine" level="trace" additivity="false">
             <AppenderRef ref="LogToConsole" level="trace"/>
             <AppenderRef ref="File_test" level="info"/>
+        </Logger>
+        <Logger name="trading.engine.Main" level="info" additivity="false">
+            <AppenderRef ref="LogToConsole" level="info"/>
+            <AppenderRef ref="main" level="info"/>
         </Logger>
     </Loggers>
 
